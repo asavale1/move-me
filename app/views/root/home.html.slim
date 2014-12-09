@@ -1,0 +1,11 @@
+h1 Select User
+
+- User.all.each do |user|
+	= link_to user.name,{:controller => "root", :action => "select_user", :user => user.id }
+
+= form_tag({:action => 'add_user'}, multipart: true, id: "subscribe" )
+							
+	div#name
+		= text_field_tag("name", nil, placeholder: "Name", class: "text")
+	div#submit
+		= submit_tag("Add User", id: "submit", class: "btn btn-primary input")
