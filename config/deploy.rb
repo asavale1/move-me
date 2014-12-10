@@ -39,6 +39,7 @@ set :deploy_to, '/www/sites/move-me'
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
+set(:linked_files, %w(config/database.yml))
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
@@ -52,16 +53,5 @@ namespace :deploy do
       	# end
     	end
   	end
-
-  	before 'deploy:assets:precompile', :symlink_config_files
-
-  	desc "Link shared files"
-  	task :symlink_config_files do
-    	symlinks = {
-      	"#{shared_path}/config/database.yml" => "#{release_path}/config/database.yml",
-    	"#{shared_path}/config/local_env.yml" => "#{release_path}/config/local_env.yml"
-		}
-		run symlinks.map{|from, to| "ln -nfs #{from} #{to}"}.join(" && ")
-	end
 
 end
