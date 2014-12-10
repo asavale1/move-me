@@ -57,9 +57,12 @@ namespace :deploy do
     	end
   	end
 
-  	desc "Restart Passenger app"
-	task :restart do
-    	execute "touch #{ File.join(current_path, 'tmp', 'restart.txt') }"
-	end
+  	desc 'Restart application'
+  	task :restart do
+    	on roles(:app), in: :sequence, wait: 5 do
+    		execute "touch #{current_path}/tmp/restart.txt"  ## -> line you should add
+    	end
+  	end
+
 
 end
