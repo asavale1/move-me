@@ -58,8 +58,8 @@ namespace :deploy do
   	end
 
   	desc "Restart Passenger app"
-		task :restart do
-    	run "touch #{ File.join(current_path, 'tmp', 'restart.txt') }"
+	task :restart do
+    	execute :touch "#{ File.join(current_path, 'tmp', 'restart.txt') }"
 	end
 
 end
