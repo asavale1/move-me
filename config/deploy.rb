@@ -60,6 +60,7 @@ namespace :deploy do
   	desc 'Restart application'
   	task :restart do
     	on roles(:app), in: :sequence, wait: 5 do
+    		execute "mkdir #{current_path}/tmp"
     		execute "touch #{current_path}/tmp/restart.txt"  ## -> line you should add
     	end
   	end
