@@ -18,6 +18,7 @@ set :default_stage, 'production'
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, '/www/sites/move-me'
 
+after "deploy", "deploy:restart"
 # Default value for :scm is :git
 # set :scm, :git
 
