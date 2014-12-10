@@ -2,13 +2,21 @@
 lock '3.3.3'
 
 set :application, 'move-me'
-set :repo_url, 'git@example.com:me/my_repo.git'
+
+set :scm, :git
+set :repo_url, 'git@github.com:asavale1/move-me.git'
+
+set :user, "ameya"
+
+
+#set :stages, ["production"]
+set :default_stage, 'production'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, '/var/www/my_app_name'
+set :deploy_to, '/www/sites/move-me'
 
 # Default value for :scm is :git
 # set :scm, :git
