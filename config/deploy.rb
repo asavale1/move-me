@@ -38,6 +38,7 @@ set :deploy_to, '/www/sites/move-me'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :rails_env, "production"
 
 set(:linked_files, %w(config/database.yml))
 # Default value for keep_releases is 5
