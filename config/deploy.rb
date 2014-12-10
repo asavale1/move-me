@@ -44,22 +44,24 @@ set :deploy_to, '/www/sites/move-me'
 
 namespace :deploy do
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
+  	after :restart, :clear_cache do
+    	on roles(:web), in: :groups, limit: 3, wait: 10 do
+      	# Here we can do anything such as:
+      	# within release_path do
+      	#   execute :rake, 'cache:clear'
+      	# end
+    	end
+  	end
 
-  before 'deploy:assets:precompile' do
+  	before 'deploy:assets:precompile', :symlink_config_files
+
   	desc "Link shared files"
-  	symlinks = {
-		"#{shared_path}/config/database.yml" => "#{release_path}/config/database.yml",
-		"#{shared_path}/config/local_env.yml" => "#{release_path}/config/local_env.yml"
+  	task :symlink_config_files do
+    	symlinks = {
+      	"#{shared_path}/config/database.yml" => "#{release_path}/config/database.yml",
+    	"#{shared_path}/config/local_env.yml" => "#{release_path}/config/local_env.yml"
 		}
-	run symlinks.map{|from, to| "ln -nfs #{from} #{to}"}.join(" && ")
-  end
+		run symlinks.map{|from, to| "ln -nfs #{from} #{to}"}.join(" && ")
+	end
 
 end
