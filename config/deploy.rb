@@ -52,8 +52,13 @@ namespace :deploy do
       	# within release_path do
       	#   execute :rake, 'cache:clear'
       	# end
-      		run "touch #{current_path}/tmp/restart.txt"
+      		#run "touch #{current_path}/tmp/restart.txt"
     	end
   	end
+
+  	desc "Restart Passenger app"
+		task :restart do
+    	run "touch #{ File.join(current_path, 'tmp', 'restart.txt') }"
+	end
 
 end
