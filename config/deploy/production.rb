@@ -16,7 +16,7 @@
 # used to set extended properties on the server.
 
 
-server 'confederation', user: 'ameya', roles: [:app, :web, :db]
+server 'confederation.cpt.ca', user: 'ameya', roles: [:app, :web, :db]
 
 
 # Custom SSH Options
