@@ -1,8 +1,9 @@
 class SearchController < ApplicationController
 	#include SearchHelper
 
-	def get_albums_from_artist
-		
+	def list_albums
+		albums = Album.all.map{ |a| {:id => a.id, :title => a.title } }
+		render :json => albums.to_json
 	end
 
 	def list_songs
