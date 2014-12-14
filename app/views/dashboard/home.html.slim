@@ -1,6 +1,6 @@
 h1 #{@user.name}
 
-
+= link_to "song", "/links"
 
 = form_tag({:action => 'upload'}, multipart: true, id: "upload" )
 	= label_tag "artist", "Artist"
