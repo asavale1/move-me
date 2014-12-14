@@ -41,7 +41,7 @@ after "deploy", "deploy:restart"
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 set :rails_env, "production"
 
-set(:linked_files, %w(config/database.yml move-me))
+set(:linked_files, %w(config/database.yml))
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
@@ -61,6 +61,7 @@ namespace :deploy do
   	desc 'Restart application'
   	task :restart do
     	on roles(:app), in: :sequence, wait: 5 do
+    		execute "ln -s #{shared_path}/public/links #{current_path}/public/links"
     		execute "mkdir #{current_path}/tmp"
     		execute "touch #{current_path}/tmp/restart.txt"  ## -> line you should add
     	end
