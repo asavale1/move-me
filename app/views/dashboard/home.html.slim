@@ -1,6 +1,6 @@
 h1 #{@user.name}
 
-= link_to "song", "/links"
+= link_to "song", "#{asset_path('links/ameya_savale/unknown/unknown/mp3test.mp3')}"
 
 = form_tag({:action => 'upload'}, multipart: true, id: "upload" )
 	= label_tag "artist", "Artist"
