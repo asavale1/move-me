@@ -41,7 +41,8 @@ after "deploy", "deploy:restart"
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 set :rails_env, "production"
 
-set(:linked_files, %w(config/database.yml))
+set(:linked_files, %w(config/database.yml public/links))
+
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
