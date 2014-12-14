@@ -3,7 +3,7 @@ class DashboardController < ApplicationController
 
 	def home
 		@user = User.find(session[:user_id])
-		@albums = Music.uniq.pluck(:album)
+		@albums = Album.uniq.pluck(:title)
 	end
 
 	def upload
@@ -11,11 +11,19 @@ class DashboardController < ApplicationController
 		artist = ( params[:artist].strip.empty? ) ? "unknown" : params[:artist].gsub(" ", "_").downcase
 		params[:files].each do |file|
 			
-			path = File.join(session[:audio_path], album, artist, file.original_filename)
+			path = File.join(session[:audio_path], artist, album, file.original_filename)
 
 			FileUtils.mkdir_p(File.dirname(path))
 			File.open(path, "wb") { |f| f.write(file.read) }
-			Music.add(artist, album, file.original_filename, path)
+			
+			artist_obj = Artist.add(artist)
+			album_obj = Album.add(album, "2014", artist_obj.id)
+			song_obj = Song.add(File.basename(path), artist_obj.id, album_obj.id)
+			Link.add(path, song_obj.id)
+			
+			
+			
+			#Music.add(artist, album, file.original_filename, path)
 
 		end
 

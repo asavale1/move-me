@@ -9,6 +9,7 @@ MoveMe::Application.routes.draw do
 
   match '/dashboard', to: 'dashboard#home', via: 'get'
   match '/upload', to: 'dashboard#upload', via: "post"
+  match '/search', to: 'search#list_albums', via: "get"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
