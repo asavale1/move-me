@@ -1,34 +1,33 @@
 class SearchController < ApplicationController
-	#include SearchHelper
+	
+	def get_all_artists
+		artists = Artist.all.map{ |a| {:id => a.id, :name => a.name} }
+		render :json => artists.to_json
+	end
 
-	def list_albums
+	def get_all_albums
 		albums = Album.all.map{ |a| {:id => a.id, :title => a.title } }
 		render :json => albums.to_json
 	end
 
-	def list_songs
-		
+	def get_album_by_artist
+		album = Album.where(:artist_id => params[:artist_id]).map{ |a| {:id => a.id, :title => a.title} }
+		render :json => album.to_json
 	end
 
-	def get_artists
-		artists = Artist.all.map{ |a| {:id => a.id, :name => a.name} }
-		render :json => artists.to_json
-
+	def get_all_songs
+		songs = Song.all.map{ |s| {:id => s.id, :title => s.title, :url => s.link.path} }
+		render :json => songs.to_json
 	end
 
-	private
-		def getAlbumsFromArtist(artist)
-			albums = Set.new
-			Song.where(:artist_id => artist.id).each{|song|
-				albums.add(Album.find(song.album_id))
-			}
-			return albums
-		end
+	def get_songs_by_artist
+		songs = Song.where(:artist_id => params[:artist_id]).map{ |s| {:id => s.id, :title => s.title, :url => s.link.path }}
+		render :json => songs.to_json
+	end
 
-		def getAlbumFromSong(song)
-			Album.find(Song.find(song.id).album_id)
-		end
-
-
+	def get_songs_by_album
+		songs = Song.where(:album_id => params[:album_id]).map{ |s| {:id => s.id, :title => s.title, :url => s.link.path }}
+		render :json => songs.to_json
+	end
 
 end
