@@ -13,6 +13,7 @@ MoveMe::Application.routes.draw do
   match '/search_all_albums', to: 'search#get_all_albums', via: "get"
   match "/search_all_artists", to: 'search#get_all_artists', via: 'get'
   match '/search_all_songs', to: 'search#get_all_songs', via: "get"
+  match '/search_all_users', to: 'search#get_all_users', via: 'get'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
