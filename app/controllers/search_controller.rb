@@ -1,5 +1,9 @@
 class SearchController < ApplicationController
 	
+	def get_all_users
+		users = User.all.map{ |u| {:id => u.id, :name => u.name } }
+	end
+
 	def get_all_artists
 		artists = Artist.all.map{ |a| {:id => a.id, :name => a.name} }
 		render :json => artists.to_json
