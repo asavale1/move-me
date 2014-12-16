@@ -6,9 +6,9 @@ div
       - User.all.each do |user|
         tr
           = link_to user.name,{:controller => "root", :action => "select_user", :user => user.id }, class: "user"
-      tr
-        = form_tag({:action => 'add_user'}, multipart: true, id: "add-user" )							
-          div#name
-            = text_field_tag("name", nil, placeholder: "Name", class: "text")
-          div#submit
-            = submit_tag("Add User", id: "submit", class: "btn btn-primary input")
+      /tr
+      /  = form_tag({:action => 'add_user'}, multipart: true, id: "add-user" )							
+      /  div#name
+      /    = text_field_tag("name", nil, placeholder: "Name", class: "text")
+      /    div#submit
+      /      = submit_tag("Add User", id: "submit", class: "btn btn-primary input")
