@@ -18,8 +18,8 @@ class DashboardController < ApplicationController
 			
 			artist_obj = Artist.add(artist)
 			album_obj = Album.add(album, "2014", artist_obj.id)
-			song_obj = Song.add(File.basename(path), artist_obj.id, album_obj.id)
-			Link.add(path, song_obj.id)
+			song_obj = Song.add(File.basename(path).split('.')[0], artist_obj.id, album_obj.id)
+			Link.add(File.join("http://192.168.0.31/links/#{User.find(session[:user_id]).username}", artist, album, file.original_filename), song_obj.id)
 			
 			
 			
