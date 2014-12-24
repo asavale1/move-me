@@ -2,13 +2,15 @@ h1 id="title" Select User
 
 div
   table#user-table  
-    td
-      - User.all.each do |user|
-        tr
+    - User.all.each do |user|  
+      tr
+        td
           = link_to user.name,{:controller => "root", :action => "select_user", :user => user.id }, class: "user"
-      /tr
-      /  = form_tag({:action => 'add_user'}, multipart: true, id: "add-user" )							
-      /  div#name
-      /    = text_field_tag("name", nil, placeholder: "Name", class: "text")
-      /    div#submit
-      /      = submit_tag("Add User", id: "submit", class: "btn btn-primary input")
+    tr
+      td
+        = form_tag({:action => 'add_user'}, multipart: true, id: "add-user")
+          div#name
+            = text_field_tag("name", nil, placeholder: "Name", class: "text")
+          div#submit
+            = submit_tag("Add User", id: "submit", class: "btn btn-primary input") 
+      

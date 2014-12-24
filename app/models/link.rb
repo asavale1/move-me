@@ -1,3 +1,11 @@
+# => SCHEMA
+#
+# => id 			: int (PRIMARY KEY)
+# => created_at		: datetime
+# => updated_at		: datetime
+# => path			: varchar(255)
+# => song_id		: int
+#
 class Link < ActiveRecord::Base
 	belongs_to :song
 

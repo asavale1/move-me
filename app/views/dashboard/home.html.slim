@@ -1,14 +1,55 @@
-h1 #{@user.name}
+= stylesheet_link_tag "dashboard", media: "all", "data-turbolinks-track" => true
+= javascript_include_tag "dashboard", "data-turbolinks-track" => true
 
-= link_to "song", "#{asset_path('links/ameya_savale/unknown/unknown/mp3test.mp3')}"
 
-= form_tag({:action => 'upload'}, multipart: true, id: "upload" )
-	= label_tag "artist", "Artist"
-	= text_field_tag "artist"
-	br
-	= label_tag "album", "Album"
-	= text_field_tag "album"
-	br
-	= file_field_tag "files[]", multiple:"", webkitdirectory: ""
-	br
-	= submit_tag "Upload"
+div#outer
+	h1 #{@user.name}
+
+	table
+		tr
+			td
+				div#users.column
+					h3 Users
+					button onclick="userSelect(null)" All
+					br
+					- User.all.each do |user|
+						button onclick="userSelect(#{user.id})" #{user.name}
+						br
+			td
+				div#artists.column
+					h3 Artists
+					button onclick="artistSelect(null)" All
+					br
+					div#artist_list
+						- Artist.all.each do |artist|
+							button onclick="artistSelect(#{artist.id})" #{artist.name}
+							br
+			td
+				div#albums.column
+					h3 Albums
+					button onclick="albumSelect(null)" All
+					br
+					div#album_list
+						-Album.all.each do |album|
+							button onclick="albumSelect(#{album.id})" #{album.title}
+							br
+				
+			td
+				div#songs.column
+					h3 Songs
+					div#song_list
+						- Song.all.each do |song|
+							h4 #{song.title}		
+			td
+				div#upload.column
+					h3 Songs
+					= form_tag({:action => 'upload'}, multipart: true, id: "upload" )
+						= label_tag "artist", "Artist"
+						= text_field_tag "artist"
+						br
+						= label_tag "album", "Album"
+						= text_field_tag "album"
+						br
+						= file_field_tag "files[]", multiple:"", webkitdirectory: ""
+						br
+						= submit_tag "Upload"

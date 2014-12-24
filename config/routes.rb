@@ -9,6 +9,10 @@ MoveMe::Application.routes.draw do
 
   match '/dashboard', to: 'dashboard#home', via: 'get'
   match '/upload', to: 'dashboard#upload', via: "post"
+  match '/user_select', to: 'dashboard#user_select', via: 'get'
+  match '/artist_select', to: 'dashboard#artist_select', via: 'get'
+  match '/album_select', to: 'dashboard#album_select', via: 'get'
+
 
   match '/search_all_albums', to: 'search#get_all_albums', via: "get"
   match "/search_all_artists", to: 'search#get_all_artists', via: 'get'
