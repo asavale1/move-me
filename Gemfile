@@ -44,7 +44,7 @@ gem 'mysql2'
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-gem 'capistrano'
+gem 'capistrano', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
