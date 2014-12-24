@@ -49,13 +49,28 @@ class DashboardController < ApplicationController
 
 	def artist_select
 		artist_id = params[:artist_id]
-		albums = Album.where(:artist_id => artist_id)
-		songs = Song.where(:artist_id => artist_id)
+		albums = nil
+		songs = nil
+		if artist_id.empty?
+			albums = Album.all
+			songs = Song.all
+		else
+			albums = Album.where(:artist_id => artist_id)
+			songs = Song.where(:artist_id => artist_id)
+		end
+		
 		render :json => { "albums" => albums.to_json,  "songs" => songs.to_json}
 	end
 
 	def album_select
-		songs = Song.where(:album_id => params[:album_id])
+		album_id = params[:album_id]
+		songs = nil
+		if album_id.empty?
+			songs = Song.all
+		else
+			songs = Song.where(:album_id => params[:album_id])
+		end
+		
 		render :json => songs.to_json
 	end
 
