@@ -12,7 +12,7 @@ div#outer
 					h3 Users
 					button onclick="userSelect(null)" All
 					br
-					- User.all.each do |user|
+					- User.order(:name).all.each do |user|
 						button onclick="userSelect(#{user.id})" #{user.name}
 						br
 			td
@@ -21,7 +21,7 @@ div#outer
 					button onclick="artistSelect(null)" All
 					br
 					div#artist_list
-						- Artist.all.each do |artist|
+						- Artist.order(:name).all.each do |artist|
 							button onclick="artistSelect(#{artist.id})" #{artist.name}
 							br
 			td
@@ -30,7 +30,7 @@ div#outer
 					button onclick="albumSelect(null)" All
 					br
 					div#album_list
-						-Album.all.each do |album|
+						-Album.order(:title).all.each do |album|
 							button onclick="albumSelect(#{album.id})" #{album.title}
 							br
 				
@@ -38,7 +38,7 @@ div#outer
 				div#songs.column
 					h3 Songs
 					div#song_list
-						- Song.all.each do |song|
+						- Song.order(:title).all.each do |song|
 							h4 #{song.title}		
 			td
 				div#upload.column
