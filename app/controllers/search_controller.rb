@@ -28,7 +28,7 @@ class SearchController < ApplicationController
 			albums = user.albums.map{ |a| {:id => a.id, :title => a.title} }
 		else
 			puts "\n\nNONE BLANK\n\n"
-			albums = Albums.where(:artist_d => params[:artist_id]).map{|a| {:id => a.id, :title => a.title}}
+			albums = Album.where(:artist_d => params[:artist_id]).map{|a| {:id => a.id, :title => a.title}}
 		end
 
 		render :json => albums.to_json
