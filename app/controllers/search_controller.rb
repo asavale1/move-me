@@ -11,7 +11,7 @@ class SearchController < ApplicationController
 			artists = Artist.all.map{ |a| {:id => a.id, :name => a.name} }
 		else
 			user = User.find(params[:user_id])
-			artists = user.artists.map{ |a| {:id => a.id, :name => a.name} }
+			artists = user.artists.order("name").map{ |a| {:id => a.id, :name => a.name} }
 		end
 		
 		render :json => artists.to_json
