@@ -18,10 +18,16 @@ class SearchController < ApplicationController
 	end
 
 	def get_albums
-		puts "\n\n"
-		puts params
-		puts "\n\n"
-		albums = Album.all.map{ |a| {:id => a.id, :title => a.title } }
+		albums = nil
+		if params[:user_id].empty? and params[:artist_id].empty?
+			albums = Album.all.map{ |a| {:id => a.id, :title => a.title } }
+		elsif params[:artist_id].empty?
+			user = User.find(params[:user_id])
+			albums = user.albums.map{ |a| {:id => a.id, :title => a.title} }
+		else
+			albums = Albums.where(:artist_d => params[:artist_id]).map{|a| {:id => a.id, :title => a.title}}
+		end
+
 		render :json => albums.to_json
 	end
 
