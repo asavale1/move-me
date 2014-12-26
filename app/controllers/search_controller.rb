@@ -20,11 +20,14 @@ class SearchController < ApplicationController
 	def get_albums
 		albums = nil
 		if params[:user_id].empty? and params[:artist_id].empty?
+			puts "\n\nBOTH BLANK\n\n"
 			albums = Album.all.map{ |a| {:id => a.id, :title => a.title } }
 		elsif params[:artist_id].empty?
+			puts "\n\nARTIST ID BLANK\n\n"
 			user = User.find(params[:user_id])
 			albums = user.albums.map{ |a| {:id => a.id, :title => a.title} }
 		else
+			puts "\n\nNONE BLANK\n\n"
 			albums = Albums.where(:artist_d => params[:artist_id]).map{|a| {:id => a.id, :title => a.title}}
 		end
 
