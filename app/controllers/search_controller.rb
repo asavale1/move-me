@@ -35,7 +35,20 @@ class SearchController < ApplicationController
 	end
 
 	def get_songs
-		songs = Song.all.map{ |s| {:id => s.id, :title => s.title, :url => s.link.path} }
+		songs = nil
+		user_id = params[:user_id]
+		artist_id = params[:artist_id]
+		album_id = params[:album_id]
+		if user_id.empty? and artist_id.empty? and album_id.empty?
+			songs = Song.all.map{ |s| {:id => s.id, :title => s.title, :url => s.link.path} }
+		elsif artist_id.empty? and album_id.empty?
+			songs = User.find(user_id).songs.map{ |s| {:id => s.id, :title => s.title, :url => s.link.path} }
+		elsif album_id.empty?
+			songs = Song.where(:artist_id => artist_id).map{ |s| {:id => s.id, :title => s.title, :url => s.link.path} }
+		else
+			songs = Song.where(:album_id => album_id).map{ |s| {:id => s.id, :title => s.title, :url => s.link.path} }
+		end
+		
 		render :json => songs.to_json
 	end
 
