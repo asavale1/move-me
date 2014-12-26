@@ -11,6 +11,9 @@ class SearchController < ApplicationController
 	end
 
 	def get_albums
+		puts "\n\n"
+		puts params
+		puts "\n\n"
 		albums = Album.all.map{ |a| {:id => a.id, :title => a.title } }
 		render :json => albums.to_json
 	end
