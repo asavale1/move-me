@@ -6,7 +6,14 @@ class SearchController < ApplicationController
 	end
 
 	def get_artists
-		artists = Artist.all.map{ |a| {:id => a.id, :name => a.name} }
+		artists = nil
+		if params[:user_id].empty?
+			artists = Artist.all.map{ |a| {:id => a.id, :name => a.name} }
+		else
+			user = User.find(params[:user_id])
+			artists = user.artists.map{ |a| {:id => a.id, :name => a.name} }
+		end
+		
 		render :json => artists.to_json
 	end
 
