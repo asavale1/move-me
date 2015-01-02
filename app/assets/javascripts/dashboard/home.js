@@ -39,6 +39,7 @@ function artistSelect(artist_id){
 }
 
 function albumSelect(album_id){
+	console.log("IN ALBUM SELECT");
 	$.ajax({
 		type: "GET",
 		url: "/album_select",
