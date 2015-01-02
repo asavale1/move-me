@@ -35,15 +35,14 @@ class DashboardController < ApplicationController
 		songs = nil
 		albums = nil
 		if user_id.empty?
-			 artists = Artist.all
-			 albums = Album.all
-			 songs = Song.all
+			 artists = Artist.order(:name).all
+			 albums = Album.order(:title).all
+			 songs = Song.order(:title).all
 		else
-			artists = User.find(user_id).artists
-			albums = User.find(user_id).albums
-			songs = User.find(user_id).songs 
+			artists = User.find(user_id).artists.order("name")
+			albums = User.find(user_id).albums.order("title")
+			songs = User.find(user_id).songs.order("title")
 		end
-
 		render :json => {"artists"=> artists.to_json, "albums" => albums.to_json, "songs" => songs.to_json}
 	end
 
@@ -52,23 +51,24 @@ class DashboardController < ApplicationController
 		albums = nil
 		songs = nil
 		if artist_id.empty?
-			albums = Album.all
-			songs = Song.all
+			albums = Album.order(:title).all
+			songs = Song.order(:title).all
 		else
-			albums = Album.where(:artist_id => artist_id)
-			songs = Song.where(:artist_id => artist_id)
+			albums = Album.where(:artist_id => artist_id).order("title")
+			songs = Song.where(:artist_id => artist_id).order("title")
 		end
 		
 		render :json => { "albums" => albums.to_json,  "songs" => songs.to_json}
 	end
 
 	def album_select
+		puts "\n\nIN ALBUM SELECT\n\n"
 		album_id = params[:album_id]
 		songs = nil
 		if album_id.empty?
-			songs = Song.all
+			songs = Song.order(:title).all
 		else
-			songs = Song.where(:album_id => params[:album_id])
+			songs = Song.where(:album_id => params[:album_id]).order("title")
 		end
 		
 		render :json => songs.to_json
