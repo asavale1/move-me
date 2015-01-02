@@ -56,7 +56,7 @@ function albumSelect(album_id){
 function replaceArtists(artist_array){
 	$('#artist_list').empty();
 	for(var i = 0; i < artist_array.length; i++){
-		$('#artist_list').append("<button onclick='artistSelect('"+artist_array[i]['id']")'>" + artist_array[i]["name"] + "</button><br>");
+		$('#artist_list').append("<button onclick='artistSelect('"+artist_array[i]['id']+")'>" + artist_array[i]["name"] + "</button><br>");
 	}
 }
 
