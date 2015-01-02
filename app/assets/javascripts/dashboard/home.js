@@ -56,14 +56,14 @@ function albumSelect(album_id){
 function replaceArtists(artist_array){
 	$('#artist_list').empty();
 	for(var i = 0; i < artist_array.length; i++){
-		$('#artist_list').append("<button>" + artist_array[i]["name"] + "</button><br>");
+		$('#artist_list').append("<button onclick=\"artistSelect(artist_array[i]['id'])\">" + artist_array[i]["name"] + "</button><br>");
 	}
 }
 
 function replaceAlbums(album_array){
 	$('#album_list').empty();
 	for(var i = 0; i < album_array.length; i++){
-		$('#album_list').append("<button>" + album_array[i]["title"] + "</button><br>");
+		$('#album_list').append("<button onclick=\"albumSelect(album_array[i]['id'])\">" + album_array[i]["title"] + "</button><br>");
 	}
 }
 
