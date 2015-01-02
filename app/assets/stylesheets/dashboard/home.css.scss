@@ -15,13 +15,11 @@ div#outer{
 		tr{
 			td{
 				vertical-align: top;
-				
-				div{
-					overflow-y: auto;
-					height: 100%;
-				}
 				width: 20%;
 				
+				div.inner{
+					overflow: scroll;
+				}
 				button{
 					border: none;
 					background-color: Transparent;

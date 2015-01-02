@@ -20,7 +20,7 @@ div#outer
 					h3 Artists
 					button onclick="artistSelect(null)" All
 					br
-					div#artist_list
+					div#artist_list.inner
 						- Artist.order(:name).all.each do |artist|
 							button onclick="artistSelect(#{artist.id})" #{artist.name}
 							br
@@ -29,7 +29,7 @@ div#outer
 					h3 Albums
 					button onclick="albumSelect(null)" All
 					br
-					div#album_list
+					div#album_list.inner
 						-Album.order(:title).all.each do |album|
 							button onclick="albumSelect(#{album.id})" #{album.title}
 							br
@@ -37,7 +37,7 @@ div#outer
 			td
 				div#songs.column
 					h3 Songs
-					div#song_list
+					div#song_list.inner
 						- Song.order(:title).all.each do |song|
 							h4 #{song.title}		
 			td
