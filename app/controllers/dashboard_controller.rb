@@ -8,22 +8,24 @@ class DashboardController < ApplicationController
 
 	def upload
 		@user = User.find(session[:user_id])
-		album = ( params[:album].strip.empty? ) ? "unknown" : params[:album].gsub(" ","_").downcase
-		artist = ( params[:artist].strip.empty? ) ? "unknown" : params[:artist].gsub(" ", "_").downcase
-		
-		artist_obj = Artist.add(artist, @user.id)
-		album_obj = Album.add(album, "2014", artist_obj.id, @user.id)	
-		
-		params[:files].each do |file|
+		if params[:files].length > 0
+			album = ( params[:album].strip.empty? ) ? "unknown" : params[:album].gsub(" ","_").downcase
+			artist = ( params[:artist].strip.empty? ) ? "unknown" : params[:artist].gsub(" ", "_").downcase
 			
-			path = File.join(session[:audio_path], artist, album, file.original_filename)
+			artist_obj = Artist.add(artist, @user.id)
+			album_obj = Album.add(album, "2014", artist_obj.id, @user.id)	
+			
+			params[:files].each do |file|
+				
+				path = File.join(session[:audio_path], artist, album, file.original_filename)
 
-			FileUtils.mkdir_p(File.dirname(path))
-			File.open(path, "wb") { |f| f.write(file.read) }
-			
-			
-			song_obj = Song.add(File.basename(path).split('.')[0], artist_obj.id, album_obj.id, @user.id)
-			Link.add(File.join("http://192.168.0.31/links/#{@user.username}", artist, album, file.original_filename), song_obj.id)
+				FileUtils.mkdir_p(File.dirname(path))
+				File.open(path, "wb") { |f| f.write(file.read) }
+				
+				
+				song_obj = Song.add(File.basename(path).split('.')[0], artist_obj.id, album_obj.id, @user.id)
+				Link.add(File.join("http://192.168.0.31/links/#{@user.username}", artist, album, file.original_filename), song_obj.id)
+			end
 		end
 
 		redirect_to action: "home"
