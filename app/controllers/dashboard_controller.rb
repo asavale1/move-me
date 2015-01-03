@@ -23,7 +23,7 @@ class DashboardController < ApplicationController
 				File.open(path, "wb") { |f| f.write(file.read) }
 				
 				
-				song_obj = Song.add(File.basename(path).split('.')[0], artist_obj.id, album_obj.id, @user.id)
+				song_obj = Song.add(File.basename(path).split('.mp3')[0], artist_obj.id, album_obj.id, @user.id)
 				Link.add(File.join("http://192.168.0.31/links/#{@user.username}", artist, album, file.original_filename), song_obj.id)
 			end
 		end
