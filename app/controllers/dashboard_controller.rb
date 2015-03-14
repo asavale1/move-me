@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
 		@user = User.find(session[:user_id])
 		@albums = Album.uniq.pluck(:name)
 		@songs = Song.all.order("name")
-		@playlists = Playlist.where("user_id = ? and name != ?", @user.id, "library")
+		@playlists = Playlist.where("user_id = ?", @user.id)
 	end
 
 	def upload
