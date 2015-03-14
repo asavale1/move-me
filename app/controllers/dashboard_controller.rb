@@ -68,7 +68,7 @@ class DashboardController < ApplicationController
 			FileUtils.mkdir_p(user_file_location)
 		end
 		
-		vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path.gsub('http://192.168.0.31/links/','')}"
+		vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path}"
 		
 		`ln -s #{vault_file_location} #{user_file_location}/`
 		`ln -s #{vault_file_location} #{user_library_location}`
