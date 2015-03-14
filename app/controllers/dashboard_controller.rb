@@ -52,25 +52,28 @@ class DashboardController < ApplicationController
 		song = Song.find(params[:song])
 		library = Playlist.where(:user_id => session[:user_id]).where(:name => "library").first		
 
-		playlist.songs << song if playlist.songs.where(:id => song.id).first.nil?
-		playlist.save
+		user_file_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/#{playlist.name}/#{song.artist.name}/#{song.album.name}"
+		user_library_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/library/#{song.artist.name}/#{song.album.name}"
+		vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path.gsub('http://192.168.0.31/links/','')}"
+
+		if playlist.name != "library"
+			playlist.songs << song if playlist.songs.where(:id => song.id).first.nil?
+			playlist.save
+
+			unless File.directory?(user_file_location)
+				FileUtils.mkdir_p(user_file_location)
+			end
+			`ln -s #{vault_file_location} #{user_file_location}/`
+		end
+		
 
 		library.songs << song if library.songs.where(:id => song.id).first.nil?
 		library.save
 
-		user_file_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/#{playlist.name}/#{song.artist.name}/#{song.album.name}"
-		user_library_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/library/#{song.artist.name}/#{song.album.name}"
 		unless File.directory?(user_library_location)
 			FileUtils.mkdir_p(user_library_location)
 		end
-
-		unless File.directory?(user_file_location)
-			FileUtils.mkdir_p(user_file_location)
-		end
 		
-		vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path.gsub('http://192.168.0.31/links/','')}"
-		
-		`ln -s #{vault_file_location} #{user_file_location}/`
 		`ln -s #{vault_file_location} #{user_library_location}`
 
 		redirect_to action: "home"
