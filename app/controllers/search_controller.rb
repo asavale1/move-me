@@ -72,11 +72,11 @@ class SearchController < ApplicationController
 
 		if playlist_id.empty?
 			songs = User.find(params[:user_id]).songs.order("name").map{ |s|
-				{ :id => s.id, :name => s.name, :link => Link.find(s.link_id).path.gsub("http://192.168.0.31", "http://192.168.0.15:3000") }
+				{ :id => s.id, :name => s.name, :link => Link.find(s.link_id).path }
 			}
 		else
 			songs = Playlist.find(params[:playlist_id]).songs.order("name").map{ |s|
-				{ :id => s.id, :name => s.name, :link => Link.find(s.link_id).path.gsub("http://192.168.0.31", "http://192.168.0.15:3000") }
+				{ :id => s.id, :name => s.name, :link => Link.find(s.link_id).path }
 			}
 		end
 =begin
