@@ -8,38 +8,16 @@ div#outer
 	table
 		tr
 			td
-				div#users.column
-					h3 Users
-					button onclick="userSelect(null)" All
-					br
-					- User.order(:name).all.each do |user|
-						button onclick="userSelect(#{user.id})" #{user.name}
-						br
+				div#create_playlist
+					= form_tag({:action => 'playlist_create', multipart: true, id: "playlist_create"})
+						= text_field_tag "name"
+						= submit_tag "Create"
 			td
-				div#artists.column
-					h3 Artists
-					button onclick="artistSelect(null)" All
-					br
-					div#artist_list.inner
-						- Artist.order(:name).all.each do |artist|
-							button onclick="artistSelect(#{artist.id})" #{artist.name}
-							br
-			td
-				div#albums.column
-					h3 Albums
-					button onclick="albumSelect(null)" All
-					br
-					div#album_list.inner
-						-Album.order(:title).all.each do |album|
-							button onclick="albumSelect(#{album.id})" #{album.title}
-							br
-				
-			td
-				div#songs.column
-					h3 Songs
-					div#song_list.inner
-						- Song.order(:title).all.each do |song|
-							h4 #{song.title}		
+				div#add_playlist
+				= form_tag({:action => 'playlist_add', multipart: true, id: "playlist_add"})
+					= select_tag "song", options_for_select(@songs.collect{ |u| [u.name, u.id] })
+					= select_tag "playlist", options_for_select(@playlists.collect{ |p| [p.name, p.id] })
+					= submit_tag "Add"
 			td
 				div#upload.column
 					h3 Songs

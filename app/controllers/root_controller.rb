@@ -3,15 +3,15 @@ require "#{Rails.root}/lib/custom/util.rb"
 class RootController < ApplicationController
 
 	def home
+		User.add("vault")
 	end
 
 	def add_user
-		user = User.new
-		user.name = params[:name]
-		user.username = params[:name].gsub(' ','_').downcase
-		user.save
-		
-		Dir.mkdir("#{@@parent_directory}/#{user.username}")
+		user = User.add(params[:name].strip)
+
+		unless File.directory?("#{@@parent_directory}/#{user.username}")
+			Dir.mkdir("#{@@parent_directory}/#{user.username}")
+		end
 
 		redirect_to action: "home"
 	end

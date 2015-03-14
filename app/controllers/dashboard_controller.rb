@@ -3,79 +3,90 @@ class DashboardController < ApplicationController
 
 	def home
 		@user = User.find(session[:user_id])
-		@albums = Album.uniq.pluck(:title)
+		@albums = Album.uniq.pluck(:name)
+		@songs = Song.all.order("name")
+		@playlists = Playlist.where("user_id = ? and name != ?", @user.id, "library")
 	end
 
 	def upload
-		@user = User.find(session[:user_id])
+		user = User.find(1)
+		playlist = Playlist.where(:user_id => user.id).first
+
 		if params[:files].length > 0
-			album = ( params[:album].strip.empty? ) ? "unknown" : params[:album].gsub(" ","_").downcase
-			artist = ( params[:artist].strip.empty? ) ? "unknown" : params[:artist].gsub(" ", "_").downcase
-			
-			artist_obj = Artist.add(artist, @user.id)
-			album_obj = Album.add(album, "2014", artist_obj.id, @user.id)	
-			
+			album_name = ( params[:album].strip.empty? ) ? "unknown" : params[:album].strip.gsub(" ","_").downcase
+			artist_name = ( params[:artist].strip.empty? ) ? "unknown" : params[:artist].strip.gsub(" ", "_").downcase
+
+			artist = Artist.add(artist_name)
+			playlist.artists << artist if playlist.artists.where(:id => artist.id).first.nil?
+			user.artists << artist if user.artists.where(:id => artist.id).first.nil?
+
+			album = Album.add(album_name, "2014", artist.id)
+			playlist.albums << album if playlist.albums.where(:id => album.id).first.nil?
+			user.albums << album if user.albums.where(:id => album.id).first.nil?
+
 			params[:files].each do |file|
 				
-				path = File.join(session[:audio_path], artist, album, file.original_filename)
+				path = File.join(@@library_directory, artist_name, album_name, file.original_filename)
 
 				FileUtils.mkdir_p(File.dirname(path))
 				File.open(path, "wb") { |f| f.write(file.read) }
+				link = Link.add(File.join("http://192.168.0.31/links/vault/library", artist_name, album_name, file.original_filename))
 				
+				song = Song.add(File.basename(path).split('.mp3')[0], album, artist, link)
 				
-				song_obj = Song.add(File.basename(path).split('.mp3')[0], artist_obj.id, album_obj.id, @user.id)
-				Link.add(File.join("http://192.168.0.31/links/#{@user.username}", artist, album, file.original_filename), song_obj.id)
+				playlist.songs << song if playlist.songs.where(:id => song.id).first.nil?
+
+				user.songs << song if user.songs.where(:id => song.id).first.nil?
+
+				playlist.save
+				user.save
 			end
 		end
 
 		redirect_to action: "home"
 	end
 
-	def user_select
-		user_id = params[:user_id]
-		artists = nil
-		songs = nil
-		albums = nil
-		if user_id.empty?
-			 artists = Artist.order(:name).all
-			 albums = Album.order(:title).all
-			 songs = Song.order(:title).all
-		else
-			artists = User.find(user_id).artists.order("name")
-			albums = User.find(user_id).albums.order("title")
-			songs = User.find(user_id).songs.order("title")
-		end
-		render :json => {"artists"=> artists.to_json, "albums" => albums.to_json, "songs" => songs.to_json}
-	end
+	def playlist_add
 
-	def artist_select
-		artist_id = params[:artist_id]
-		albums = nil
-		songs = nil
-		if artist_id.empty?
-			albums = Album.order(:title).all
-			songs = Song.order(:title).all
-		else
-			albums = Album.where(:artist_id => artist_id).order("title")
-			songs = Song.where(:artist_id => artist_id).order("title")
+		playlist = Playlist.find(params[:playlist])
+		song = Song.find(params[:song])
+		library = Playlist.where(:user_id => session[:user_id]).where(:name => "library").first		
+
+		playlist.songs << song if playlist.songs.where(:id => song.id).first.nil?
+		playlist.save
+
+		library.songs << song if library.songs.where(:id => song.id).first.nil?
+		library.save
+
+		user_file_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/#{playlist.name}/#{song.artist.name}/#{song.album.name}"
+		user_library_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/library/#{song.artist.name}/#{song.album.name}"
+		unless File.directory?(user_library_location)
+			FileUtils.mkdir_p(user_library_location)
+		end
+
+		unless File.directory?(user_file_location)
+			FileUtils.mkdir_p(user_file_location)
 		end
 		
-		render :json => { "albums" => albums.to_json,  "songs" => songs.to_json}
+		vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path.gsub('http://192.168.0.31/links/','')}"
+		
+		`ln -s #{vault_file_location} #{user_file_location}/`
+		`ln -s #{vault_file_location} #{user_library_location}`
+
+		redirect_to action: "home"
 	end
 
-	def album_select
-		puts "\n\nIN ALBUM SELECT\n\n"
-		album_id = params[:album_id]
-		songs = nil
-		if album_id.empty?
-			songs = Song.order(:title).all
-		else
-			songs = Song.where(:album_id => params[:album_id]).order("title")
+	def playlist_create
+		playlist = params[:name].strip
+		unless playlist.empty?
+			playlist = playlist.gsub(" ", "_").downcase
+			user = User.find(session[:user_id])
+			Playlist.add(playlist, user.id)
 		end
 		
-		render :json => songs.to_json
-	end
 
+		redirect_to action: "home"
+	end
 
 
 	private

@@ -11,51 +11,97 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141220211606) do
+ActiveRecord::Schema.define(version: 20150310025632) do
 
   create_table "albums", force: true do |t|
-    t.string   "title"
+    t.string   "name"
     t.integer  "year"
+    t.integer  "artist_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "artist_id"
-    t.integer  "user_id"
   end
 
-  add_index "albums", ["user_id"], name: "index_albums_on_user_id", using: :btree
+  create_table "albums_playlists", id: false, force: true do |t|
+    t.integer "playlist_id"
+    t.integer "album_id"
+  end
+
+  add_index "albums_playlists", ["album_id"], name: "index_albums_playlists_on_album_id", using: :btree
+  add_index "albums_playlists", ["playlist_id", "album_id"], name: "index_albums_playlists_on_playlist_id_and_album_id", using: :btree
+
+  create_table "albums_users", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "album_id"
+  end
+
+  add_index "albums_users", ["album_id"], name: "index_albums_users_on_album_id", using: :btree
+  add_index "albums_users", ["user_id", "album_id"], name: "index_albums_users_on_user_id_and_album_id", using: :btree
 
   create_table "artists", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
   end
 
-  add_index "artists", ["user_id"], name: "index_artists_on_user_id", using: :btree
+  create_table "artists_playlists", id: false, force: true do |t|
+    t.integer "playlist_id"
+    t.integer "artist_id"
+  end
+
+  add_index "artists_playlists", ["artist_id"], name: "index_artists_playlists_on_artist_id", using: :btree
+  add_index "artists_playlists", ["playlist_id", "artist_id"], name: "index_artists_playlists_on_playlist_id_and_artist_id", using: :btree
+
+  create_table "artists_users", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "artist_id"
+  end
+
+  add_index "artists_users", ["artist_id"], name: "index_artists_users_on_artist_id", using: :btree
+  add_index "artists_users", ["user_id", "artist_id"], name: "index_artists_users_on_user_id_and_artist_id", using: :btree
 
   create_table "links", force: true do |t|
+    t.string   "path"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "path"
-    t.integer  "song_id"
   end
+
+  create_table "playlists", force: true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "playlists_songs", id: false, force: true do |t|
+    t.integer "playlist_id"
+    t.integer "song_id"
+  end
+
+  add_index "playlists_songs", ["playlist_id", "song_id"], name: "index_playlists_songs_on_playlist_id_and_song_id", using: :btree
+  add_index "playlists_songs", ["song_id"], name: "index_playlists_songs_on_song_id", using: :btree
 
   create_table "songs", force: true do |t|
-    t.string   "title"
+    t.string   "name"
+    t.integer  "link_id"
+    t.integer  "artist_id"
+    t.integer  "album_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "album_id"
-    t.integer  "artist_id"
-    t.integer  "user_id"
   end
 
-  add_index "songs", ["user_id"], name: "index_songs_on_user_id", using: :btree
+  create_table "songs_users", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "song_id"
+  end
+
+  add_index "songs_users", ["song_id"], name: "index_songs_users_on_song_id", using: :btree
+  add_index "songs_users", ["user_id", "song_id"], name: "index_songs_users_on_user_id_and_song_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
+    t.string   "username"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "username"
   end
 
 end

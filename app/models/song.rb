@@ -1,30 +1,30 @@
 # => SCHEMA
 #
 # => id 			: int (PRIMARY KEY)
-# => title			: varchar(255)
+# => name			: varchar(255)
+# => artist_id		: int
+# => album_id		: int
 # => created_at		: datetime
 # => updated_at		: datetime
-# => album_id		: int
-# => artist_id		: int
-# => user_id 		: int
 #
 class Song < ActiveRecord::Base
 	has_one :link
 	belongs_to :album
 	belongs_to :artist
-	belongs_to :user
+	has_and_belongs_to_many :playlists
+	has_and_belongs_to_many :users
 
-	def self.add(title, artist_id, album_id, user_id)
-		s = Song.where(:user_id => user_id).where("artist_id = ? AND album_id = ? AND title = ?", artist_id, album_id, title).first
+	def self.add(name, album, artist, link)
+		s = Song.where(:name => name).where(:artist_id => artist.id).where(:album_id  => album.id).first
 		if s.nil?
 			s = Song.new
-			s.title = title
-			s.artist_id = artist_id
-			s.album_id = album_id
-			s.user_id = user_id
+			s.name = name
+			s.album_id = album.id
+			s.artist_id = artist.id
+			s.link_id = link.id
 			s.save
 		end
-		
+
 		return s
 	end
 end

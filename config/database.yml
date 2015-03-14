@@ -6,7 +6,7 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: hound
+  database: moveme
   username: root
   port: 3306
   pool: 5

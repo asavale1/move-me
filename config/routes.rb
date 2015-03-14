@@ -9,6 +9,8 @@ MoveMe::Application.routes.draw do
 
   match '/dashboard', to: 'dashboard#home', via: 'get'
   match '/upload', to: 'dashboard#upload', via: "post"
+  match '/playlistc', to: 'dashboard#playlist_create', via: 'post'
+  match '/playlista', to: 'dashboard#playlist_add', via: 'post'
   match '/user_select', to: 'dashboard#user_select', via: 'get'
   match '/artist_select', to: 'dashboard#artist_select', via: 'get'
   match '/album_select', to: 'dashboard#album_select', via: 'get'
@@ -17,6 +19,7 @@ MoveMe::Application.routes.draw do
   match '/search_albums', to: 'search#get_albums', via: "get"
   match "/search_artists", to: 'search#get_artists', via: 'get'
   match '/search_songs', to: 'search#get_songs', via: "get"
+  match '/search_playlists', to: 'search#get_playlists', via: 'get'
   match '/search_users', to: 'search#get_users', via: 'get'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
