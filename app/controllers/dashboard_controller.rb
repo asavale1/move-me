@@ -26,11 +26,11 @@ class DashboardController < ApplicationController
 
 			params[:files].each do |file|
 				
-				path = File.join(@@library_directory, artist_name, album_name, file.original_filename)
+				path = File.join(@@library_directory, artist_name, album_name, file.original_filename.gsub(' ', '_').downcase)
 
 				FileUtils.mkdir_p(File.dirname(path))
 				File.open(path, "wb") { |f| f.write(file.read) }
-				link = Link.add(File.join("http://192.168.0.31/links/vault/library", artist_name, album_name, file.original_filename))
+				link = Link.add(File.join("http://192.168.0.31/links/vault/library", artist_name, album_name, file.original_filename.gsub(' ', '_').downcase))
 				
 				song = Song.add(File.basename(path).split('.mp3')[0], album, artist, link)
 				
