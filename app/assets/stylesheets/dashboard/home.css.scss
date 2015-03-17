@@ -2,7 +2,7 @@ div#outer{
 	width: 100%;
 	height: 100vh;
 	margin: 20px;
-	padding: 20px;
+	padding: 1%;
 	background-color: #4F2C73;
 
 	th, h1, h2, h3, h4, label{
@@ -14,13 +14,14 @@ div#outer{
 	div#left{
 		float:left;
 		width: 50%;
-		height: 100%;
+		height: 80%;
 
 		div#vault{
 			max-height: 50%;
+			overflow-y: scroll;
 			table{
 				height: 100%;
-				overflow-y: scroll;
+				
 				tr.even{
 					background-color: #21053e;
 				}
@@ -37,6 +38,7 @@ div#outer{
 
 		div#my_vault{
 			max-height: 50%;
+			overflow-y: scroll;
 			table{
 				td#my_playlists{
 					width: 10%;

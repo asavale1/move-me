@@ -5,8 +5,8 @@
 div#outer
 	h1 #{@user.name}
 	div#left
+		h2 Vault
 		div#vault
-			h2 Vault
 			- i = 0
 			table
 				tr
@@ -25,8 +25,8 @@ div#outer
 							td #{Album.find(song.album_id).name}
 							td #{song.name}
 					- i = i+1
+		h2 My Vault
 		div#my_vault
-			h2 My Vault
 			table
 				tr
 					td
