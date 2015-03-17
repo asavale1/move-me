@@ -3,6 +3,15 @@ class DashboardController < ApplicationController
 
 	def home
 		@user = User.find(session[:user_id])
+		@v_artist = Artist.all
+		@v_album = Album.all
+		@v_song = Song.all
+
+		@m_playlists = @user.playlists
+		@m_artists = @user.artists
+		@m_albums = @user.albums
+		@m_songs = @user.songs
+
 		@albums = Album.uniq.pluck(:name)
 		@songs = Song.all.order("name")
 		@playlists = Playlist.where("user_id = ?", @user.id)
@@ -47,13 +56,16 @@ class DashboardController < ApplicationController
 	end
 
 	def playlist_add
-
+		user = User.find(session[:user_id])
 		playlist = Playlist.find(params[:playlist])
 		song = Song.find(params[:song])
-		library = Playlist.where(:user_id => session[:user_id]).where(:name => "library").first		
+		artist = Artist.find(song.artist_id)
+		album = Album.find(song.album_id)
 
-		user_file_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/#{playlist.name}/#{song.artist.name}/#{song.album.name}"
-		user_library_location = "#{@@parent_directory}/#{User.find(session[:user_id]).username}/library/#{song.artist.name}/#{song.album.name}"
+		library = Playlist.where(:user_id => user.id).where(:name => "library").first		
+
+		user_file_location = "#{@@parent_directory}/#{user.username}/#{playlist.name}/#{song.artist.name}/#{song.album.name}"
+		user_library_location = "#{@@parent_directory}/#{user.username}/library/#{song.artist.name}/#{song.album.name}"
 		vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path.gsub('http://192.168.0.31/links/','')}"
 
 		if playlist.name != "library"
@@ -75,6 +87,10 @@ class DashboardController < ApplicationController
 		end
 		
 		`ln -s #{vault_file_location} #{user_library_location}`
+
+		user.artists << artist if user.artists.where(:id => artist.id).first.nil?
+		user.albums << album if user.albums.where(:id => album.id).first.nil?
+		user.songs << song if user.songs.where(:id => song.id).first.nil?
 
 		redirect_to action: "home"
 	end
