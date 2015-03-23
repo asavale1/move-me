@@ -1,5 +1,4 @@
 function userSelect(user_id){
-	console.log(user_id);
 	$.ajax({
 		type: "GET",
 		url: "/user_select",
@@ -20,57 +19,70 @@ function userSelect(user_id){
 	});
 }
 
-function artistSelect(artist_id){
+function replaceSongs(playlist_id, playlists_size, playlist_position){
+
 	$.ajax({
 		type: "GET",
-		url: "/artist_select",
+		url: "/playlists",
 		data: { 
-			"artist_id" : artist_id 
+			"playlist_id" : playlist_id 
 		},
 		success:function(data){
-			var albums = JSON.parse(data["albums"]);
-			replaceAlbums(albums);
+			console.log(data);
 
-			var songs = JSON.parse(data["songs"]);
-      		replaceSongs(songs);
-      	},
+			var songs = data.songs;
+			$('ul#song_list').empty();
+
+			for(var i = 0; i < songs.length; i++){
+				$('ul#song_list').append("<li>" + songs[i]["name"] + "</li>");
+			}
+
+			for(var j = 0; j < playlists_size; j++){
+				if(j == playlist_position ){
+					$('#playlist' + j).css("background-color", "#a188fa");
+					$('#playlist' + j).attr("data-selected", "true");
+				}else{
+					$('#playlist' + j).css("background-color", "#21053e");
+					$('#playlist' + j).attr("data-selected", "false");
+				}
+			}
+
+			$('button#add_song').html("Add To " + data.name);
+
+		},		
 		error:function(data){}
-    });
+	});
 }
 
-function albumSelect(album_id){
-	console.log("IN ALBUM SELECT");
+function addToPlaylist(){
+	var playlist_id = $("button[data-selected='true']").attr("data-id");
+	var songs_id = []
+
+	$("input:checked").each(function (){
+		songs_id.push($(this).val());
+	});
+
 	$.ajax({
-		type: "GET",
-		url: "/album_select",
+		type: "POST",
+		url: "/playlista",
 		data: {
-			"album_id" : album_id
+			"playlist" : playlist_id,
+			"songs" : songs_id
 		},
 		success: function(data){
-			replaceSongs(data);
+			if(data.status){
+				var playlist = JSON.parse(data.playlist);
+				$('ul#song_list').empty();
+
+				for(var i = 0; i < playlist.songs.length; i++){
+					$('ul#song_list').append("<li>" + playlist.songs[i]["name"] + "</li>");
+				}
+			}else{
+				console.log("INVALID");
+			}
 		},
 		error: function(data){}
-	})
+	});
 }
 
-function replaceArtists(artist_array){
-	$('#artist_list').empty();
-	for(var i = 0; i < artist_array.length; i++){
-		$('#artist_list').append("<button onclick='artistSelect('"+artist_array[i]['id']+")'>" + artist_array[i]["name"] + "</button><br>");
-	}
-}
-
-function replaceAlbums(album_array){
-	$('#album_list').empty();
-	for(var i = 0; i < album_array.length; i++){
-		$('#album_list').append("<button onclick='albumSelect("+album_array[i]['id']+")'>" + album_array[i]["title"] + "</button><br>");
-	}
-}
-
-function replaceSongs(song_array){
-	$('#song_list').empty();
-	for(var i = 0; i < song_array.length; i++){
-		$('#song_list').append("<h4>" + song_array[i]["title"] + "</h4>");
-	}
-}
 

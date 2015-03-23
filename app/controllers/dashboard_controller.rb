@@ -3,18 +3,11 @@ class DashboardController < ApplicationController
 
 	def home
 		@user = User.find(session[:user_id])
-		@v_artist = Artist.all
-		@v_album = Album.all
 		@v_song = Song.all
 
 		@m_playlists = @user.playlists
-		@m_artists = @user.artists
-		@m_albums = @user.albums
 		@m_songs = @user.songs
 
-		@albums = Album.uniq.pluck(:name)
-		@songs = Song.all.order("name")
-		@playlists = Playlist.where("user_id = ?", @user.id)
 	end
 
 	def upload
@@ -56,43 +49,58 @@ class DashboardController < ApplicationController
 	end
 
 	def playlist_add
-		user = User.find(session[:user_id])
-		playlist = Playlist.find(params[:playlist])
-		song = Song.find(params[:song])
-		artist = Artist.find(song.artist_id)
-		album = Album.find(song.album_id)
+		if(params[:playlist].nil? or params[:songs].nil?)
+			render :json => {status: false}
+		else
+			user = User.find(session[:user_id])
+			playlist = Playlist.find(params[:playlist])
+			
 
-		library = Playlist.where(:user_id => user.id).where(:name => "library").first		
+			params[:songs].each do |song_id|
+				song = Song.find(song_id)
+				artist = Artist.find(song.artist_id)
+				album = Album.find(song.album_id)
 
-		user_file_location = "#{@@parent_directory}/#{user.username}/#{playlist.name}/#{song.artist.name}/#{song.album.name}"
-		user_library_location = "#{@@parent_directory}/#{user.username}/library/#{song.artist.name}/#{song.album.name}"
-		vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path.gsub('http://192.168.0.31/links/','')}"
+				library = Playlist.where(:user_id => user.id).where(:name => "library").first
+				
+				user_file_location = "#{@@parent_directory}/#{user.username}/#{playlist.name}/#{song.artist.name}/#{song.album.name}"
+				user_library_location = "#{@@parent_directory}/#{user.username}/library/#{song.artist.name}/#{song.album.name}"
+				vault_file_location = "#{@@parent_directory}/#{Link.find(song.link_id).path.gsub('http://192.168.0.31/links/','')}"
 
-		if playlist.name != "library"
-			playlist.songs << song if playlist.songs.where(:id => song.id).first.nil?
-			playlist.save
+				if playlist.name != "library"
+					playlist.songs << song if playlist.songs.where(:id => song.id).first.nil?
+					playlist.save
 
-			unless File.directory?(user_file_location)
-				FileUtils.mkdir_p(user_file_location)
+					unless File.directory?(user_file_location)
+						FileUtils.mkdir_p(user_file_location)
+					end
+					`ln -s #{vault_file_location} #{user_file_location}/`
+				end
+
+				library.songs << song if library.songs.where(:id => song.id).first.nil?
+				library.save
+
+				unless File.directory?(user_library_location)
+					FileUtils.mkdir_p(user_library_location)
+				end
+				
+				`ln -s #{vault_file_location} #{user_library_location}`
+
+				user.artists << artist if user.artists.where(:id => artist.id).first.nil?
+				user.albums << album if user.albums.where(:id => album.id).first.nil?
+				user.songs << song if user.songs.where(:id => song.id).first.nil?
+
 			end
-			`ln -s #{vault_file_location} #{user_file_location}/`
+
+			puts "\n\n"
+			puts playlist.to_json(:include => :songs)
+			puts "\n\n"
+
+			render :json => {
+								status: true,
+								playlist: playlist.to_json(:include => :songs)
+							}
 		end
-		
-
-		library.songs << song if library.songs.where(:id => song.id).first.nil?
-		library.save
-
-		unless File.directory?(user_library_location)
-			FileUtils.mkdir_p(user_library_location)
-		end
-		
-		`ln -s #{vault_file_location} #{user_library_location}`
-
-		user.artists << artist if user.artists.where(:id => artist.id).first.nil?
-		user.albums << album if user.albums.where(:id => album.id).first.nil?
-		user.songs << song if user.songs.where(:id => song.id).first.nil?
-
-		redirect_to action: "home"
 	end
 
 	def playlist_create
@@ -107,6 +115,11 @@ class DashboardController < ApplicationController
 		redirect_to action: "home"
 	end
 
+	def playlist_select
+		playlist = Playlist.find(params[:playlist_id])
+
+		render :json => playlist.to_json(:include => :songs)
+	end
 
 	private
 		def signed_in

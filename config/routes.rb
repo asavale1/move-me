@@ -11,9 +11,7 @@ MoveMe::Application.routes.draw do
   match '/upload', to: 'dashboard#upload', via: "post"
   match '/playlistc', to: 'dashboard#playlist_create', via: 'post'
   match '/playlista', to: 'dashboard#playlist_add', via: 'post'
-  match '/user_select', to: 'dashboard#user_select', via: 'get'
-  match '/artist_select', to: 'dashboard#artist_select', via: 'get'
-  match '/album_select', to: 'dashboard#album_select', via: 'get'
+  match '/playlists', to: 'dashboard#playlist_select', via: 'get'
 
 
   match '/search_albums', to: 'search#get_albums', via: "get"

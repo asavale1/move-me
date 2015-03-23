@@ -1,87 +1,73 @@
 div#outer{
-	width: 100%;
-	height: 100vh;
-	margin: 20px;
-	padding: 1%;
-	background-color: #4F2C73;
-
-	th, h1, h2, h3, h4, label{
-		color: #fff;
-	}
-
-	
+	background-color: #4f2c73;
+	width: 98%;
+	height: 97%;
 
 	div#left{
-		float:left;
-		width: 50%;
-		height: 80%;
+		width: 48%;
+		height: 98%;
+		float: left;
+		padding: 1%;
 
 		div#vault{
-			max-height: 50%;
-			overflow-y: scroll;
-			table{
-				height: 100%;
-				
-				tr.even{
-					background-color: #21053e;
-				}
-				tr.odd{
-					background-color: #4F2C73;
-				}
-				td{
-					text-align: center;
-					color: #fff;
-					padding: 10px;
+			width: 100%;
+			height: 50%;
+			
+			div#vault_table{
+				text-align: center;
+				overflow-y: auto;
+				width: 100%;
+				height: 80%;
+
+				table{
+					width: 100%;
+					height: 100%;
+					
+					th{
+						color: #fff;
+					}
+					td{
+						color: #fff;
+						font-size: 110%;
+						padding: 2%;
+					}
+					tr.even{
+						background-color: #21053e;
+					}
+					tr.odd{
+						background-color: #4F2C73;
+					}
 				}
 			}
 		}
 
 		div#my_vault{
-			max-height: 50%;
-			overflow-y: scroll;
-			table{
-				td#my_playlists{
-					width: 10%;
-				}
-			}
-			ul{
-				float: left;
-				list-style-type: none;
-			}
-			table#my_song_list{
-				height: 100%;
-				overflow-y: scroll;
-				text-align: center;
-				td{
-					color: #fff;
-					padding: 10px;
-				}
-				tr.even{
-					background-color: #21053e;
-				}
-				tr.odd{
-					background-color: #4F2C73;
-				}
-				
-			}
-		}
-
-		table{
 			width: 100%;
-			height: 100%;
-			tr{
-				td{
-					vertical-align: top;
-					width: 20%;
-					
-					div.inner{
-						overflow: scroll;
-					}
-					button{
-						border: none;
-						background-color: Transparent;
+			height: 50%;
+
+			div#my_vault_table{
+				overflow-y: auto;
+				text-align: center;
+				width: 100%;
+				height: 80%;
+
+				table{
+					width: 100%;
+					height: 100%;
+
+					th{
 						color: #fff;
-						font-size: 20px;
+					}
+					td{
+						color: #fff;
+						font-size: 110%;
+						padding: 2%;
+					}
+					tr.even{
+						background-color: #21053e;
+					}
+					tr.odd{
+						background-color: #4F2C73;
 					}
 				}
 			}
@@ -89,11 +75,66 @@ div#outer{
 	}
 
 	div#right{
-		float: right;
 		width: 50%;
 		height: 100%;
-	}
+		float: right;
 
-	
-	
+		div#playlist{
+			width: 50%;
+			height: 100%;
+			float: left;
+			text-align: center;
+
+			button{
+				width: 80%;
+				color: #fff;
+				background: none;
+				background-color: #230236;
+				border: none;
+				margin-bottom: 10px;
+				padding: 1%;
+				font-size: 140%;
+			}
+
+			div#playlist_buttons{
+				background-color: #21053e;
+				border-radius: 10px;
+
+				button{
+					width: 80%;
+					border: none;
+					background: none;
+					color: #fff;
+					font-size: 140%;
+
+					padding: 2%;
+					margin: 1%;
+				}
+			}
+
+		}
+
+		div#song{
+			width: 50%;
+			height: 100%;
+			float: right;
+
+			ul{
+				list-style: none;
+			}
+
+			li{
+				padding: 2%;
+				color: #fff;
+				font-size: 130%;
+			}
+			button{
+				border: none;
+				background: none;
+				color: #fff;
+				font-size: 110%;
+			}
+		}
+
+	}
 }
