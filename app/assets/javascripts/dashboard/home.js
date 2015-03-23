@@ -31,10 +31,10 @@ function replaceSongs(playlist_id, playlists_size, playlist_position){
 			console.log(data);
 
 			var songs = data.songs;
-			$('ul#song_list').empty();
+			$('ul#songs').empty();
 
 			for(var i = 0; i < songs.length; i++){
-				$('ul#song_list').append("<li>" + songs[i]["name"] + "</li>");
+				$('ul#songs').append("<li>" + songs[i]["name"] + "</li>");
 			}
 
 			for(var j = 0; j < playlists_size; j++){
@@ -72,10 +72,10 @@ function addToPlaylist(){
 		success: function(data){
 			if(data.status){
 				var playlist = JSON.parse(data.playlist);
-				$('ul#song_list').empty();
+				$('ul#songs').empty();
 
 				for(var i = 0; i < playlist.songs.length; i++){
-					$('ul#song_list').append("<li>" + playlist.songs[i]["name"] + "</li>");
+					$('ul#songs').append("<li>" + playlist.songs[i]["name"] + "</li>");
 				}
 			}else{
 				console.log("INVALID");
