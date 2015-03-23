@@ -3,10 +3,10 @@ class DashboardController < ApplicationController
 
 	def home
 		@user = User.find(session[:user_id])
-		@v_song = Song.all
+		@v_song = Song.all.order(:name)
 
 		@m_playlists = @user.playlists
-		@m_songs = @user.songs
+		@m_songs = @user.songs.order(:name)
 
 	end
 
@@ -91,10 +91,6 @@ class DashboardController < ApplicationController
 				user.songs << song if user.songs.where(:id => song.id).first.nil?
 
 			end
-
-			puts "\n\n"
-			puts playlist.to_json(:include => :songs)
-			puts "\n\n"
 
 			render :json => {
 								status: true,
